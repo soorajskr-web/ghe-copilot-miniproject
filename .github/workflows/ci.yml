@@ -3,6 +3,7 @@ name: Terraform AKS CI
 on:
   push:
     branches:
+      - main
       - development
   pull_request:
     branches:
@@ -11,9 +12,6 @@ on:
       - opened
       - synchronize
       - reopened
-  push:
-    branches:
-      - main
 
 permissions:
   id-token: write
