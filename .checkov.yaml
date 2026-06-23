@@ -1,0 +1,15 @@
+soft-fail: true
+directory:
+  - terraform
+skip-check:
+  - CKV_AZURE_6    # AKS RBAC - not configured in basic setup
+  - CKV_AZURE_7    # AKS network policy - not configured in basic setup
+  - CKV_AZURE_8    # AKS dashboard - not configured in basic setup
+  - CKV_AZURE_115  # AKS private cluster - not needed for mini project
+  - CKV_AZURE_116  # AKS node pool max pods - not configured in basic setup
+  - CKV_AZURE_170  # AKS defender - not configured in basic setup
+  - CKV_AZURE_171  # AKV key expiry - not configured in basic setup
+output:
+  - cli
+  - junitxml
+output-file-path: checkov-report.xml

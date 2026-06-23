@@ -61,6 +61,42 @@ jobs:
         run: terraform fmt -check
         working-directory: ./terraform
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.50.0
+
+      - name: TFLint Init
+        run: tflint --init
+        working-directory: ./terraform
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: TFLint Run
+        run: tflint --format compact
+        working-directory: ./terraform
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Checkov Scan
+        run: |
+          checkov \
+            --directory terraform \
+            --config-file .checkov.yaml \
+            --output cli \
+            --output junitxml \
+            --output-file-path checkov-report.xml \
+            --soft-fail
+        working-directory: .
+
+      - name: Upload Checkov Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: checkov-report
+          path: checkov-report.xml
+
       - name: Terraform Validate
         run: terraform validate
         working-directory: ./terraform
