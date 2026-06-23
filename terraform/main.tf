@@ -19,46 +19,32 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
+module "resource_group" {
+  source = "git::https://github.com/soorajskr-web/tf-shared-modules//tf-module-resource-group?ref=v1.0.0"
 
-  tags = {
-    environment = var.environment
-    project     = "ghe-copilot-miniproject"
-  }
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  environment         = var.environment
+  project_name        = "ghe-copilot-miniproject"
 }
 
-resource "azurerm_kubernetes_cluster" "aks" {
-  name                = var.cluster_name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  dns_prefix          = var.cluster_name
+module "aks" {
+  source = "git::https://github.com/soorajskr-web/tf-shared-modules//tf-module-aks?ref=v1.0.0"
 
-  default_node_pool {
-    name       = "systempool"
-    node_count = var.system_node_count
-    vm_size    = "Standard_DS2_v2"
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  tags = {
-    environment = var.environment
-    project     = "ghe-copilot-miniproject"
-  }
+  cluster_name        = var.cluster_name
+  location            = module.resource_group.resource_group_location
+  resource_group_name = module.resource_group.resource_group_name
+  system_node_count   = var.system_node_count
+  environment         = var.environment
+  project_name        = "ghe-copilot-miniproject"
 }
 
-resource "azurerm_kubernetes_cluster_node_pool" "userpool" {
-  name                  = "userpool"
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
-  vm_size               = "Standard_DS2_v2"
+module "aks_nodepool" {
+  source = "git::https://github.com/soorajskr-web/tf-shared-modules//tf-module-aks-nodepool?ref=v1.0.0"
+
+  nodepool_name         = "userpool"
+  kubernetes_cluster_id = module.aks.aks_cluster_id
   node_count            = var.user_node_count
-
-  tags = {
-    environment = var.environment
-    project     = "ghe-copilot-miniproject"
-  }
+  environment           = var.environment
+  project_name          = "ghe-copilot-miniproject"
 }
