@@ -84,7 +84,7 @@ jobs:
         working-directory: ./terraform
 
       - name: Install Checkov
-        run: pip install checkov
+        run: pip install checkov --break-system-packages
 
       - name: Checkov Scan
         run: |
