@@ -29,7 +29,7 @@ module "resource_group" {
 }
 
 module "aks" {
-  source = "git::https://github.com/soorajskr-web/tf-shared-modules//tf-module-aks?ref=v1.0.0"
+  source = "git::https://github.com/soorajskr-web/tf-shared-modules//tf-module-aks?ref=v1.0.1"
 
   cluster_name        = var.cluster_name
   location            = module.resource_group.resource_group_location
