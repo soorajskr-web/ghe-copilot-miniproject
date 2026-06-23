@@ -38,8 +38,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get update -y
-          apt-get install -y curl unzip git sudo nodejs npm
+          sudo apt-get update -y
+          sudo apt-get install -y curl unzip git nodejs npm
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
       - name: Configure Git for private modules
@@ -137,8 +137,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt-get update -y
-          apt-get install -y curl unzip git sudo nodejs npm
+          sudo apt-get update -y
+          sudo apt-get install -y curl unzip git nodejs npm
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
       - name: Configure Git for private modules
