@@ -29,6 +29,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Configure Git for private modules
+        run: |
+          git config --global url."https://oauth2:${{ secrets.GH_PAT }}@github.com".insteadOf "https://github.com"
+
       - name: Azure Login via OIDC
         uses: azure/login@v2
         with:
